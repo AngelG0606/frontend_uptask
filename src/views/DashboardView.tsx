@@ -14,8 +14,6 @@ export default function DashboardView() {
     retry : 2
   })
 
-  console.log(data)
-
   if(isLoading) return <p className="text-5xl text-gray-500 text-center">Cargando...</p>
 
   if(isError) return 'Error'
@@ -68,7 +66,7 @@ export default function DashboardView() {
                                         </Link>
                                     </Menu.Item>
                                     <Menu.Item>
-                                        <Link to={``}
+                                        <Link to={`/projects/${project._id}/edit`}
                                             className='block px-3 py-1 text-sm leading-6 text-gray-900'>
                                         Editar Proyecto
                                         </Link>
