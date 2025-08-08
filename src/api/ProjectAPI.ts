@@ -53,3 +53,15 @@ export async function updateProject({formData, projectId} : {formData : ProjectF
         }
     }
 }
+
+export async function deleteProject(projectId : Project['_id']) {
+    try {
+        const url = `/projects/${projectId}`
+        const { data } = await api.delete<string>(url)
+        return data
+    } catch (error) {
+        if(isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
+    }
+}
