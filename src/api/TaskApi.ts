@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import type { Project, Task, TaskFormData } from "../types";
+import { taskSchema, type Project, type Task, type TaskFormData } from "../types";
 import api from "@/lib/axios";
 
 
@@ -19,7 +19,10 @@ export async function getTaskById({taskId, projectId} : {taskId : Task['_id'], p
     try {
         const url = `/projects/${projectId}/tasks/${taskId}`
         const { data } = await api(url)
-        return data
+        const response = taskSchema.safeParse(data)
+        if(response.success) {
+            return response.data
+        }
     } catch (error) {
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
@@ -48,5 +51,16 @@ export async function deleteTask({projectId, taskId} : {projectId : Project['_id
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
         }
+    }
+}
+
+
+export async function updateStatus({projectId, taskId, status} : {projectId : Project['_id'], taskId : Task['_id'], status : Task['status']}){
+    try {
+        const url = `/projects/${projectId}/tasks/${taskId}/status`
+        const { data } = await api.post<string>(url, {status})
+        return data
+    } catch (error) {
+        
     }
 }
