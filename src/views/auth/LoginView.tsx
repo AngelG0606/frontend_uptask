@@ -1,17 +1,34 @@
 import { useForm } from "react-hook-form";
 import type { UserLoginForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/authApi";
+import { toast } from "react-toastify";
 
 export default function LoginView() {
 
+  const navigate = useNavigate()
   const initialValues: UserLoginForm = {
     email: '',
     password: '',
   }
   const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
 
-  const handleLogin = (formData: UserLoginForm) => { }
+  const {mutate} = useMutation({
+    mutationFn : login,
+    onError : (error) => {
+      toast.error(error.message)
+    },
+    onSuccess : (data) => {
+      toast.success(data)
+    }
+  }) 
+
+  const handleLogin = (formData: UserLoginForm) => { 
+    mutate(formData)
+    navigate('/')
+  }
 
   return (
     <>
@@ -84,7 +101,7 @@ export default function LoginView() {
         </Link>
 
         <Link
-            to={'/auth/register'}
+            to={'/auth/forgot-password'}
             className="text-white font-normal text-xl hover:text-fuchsia-700 hover:underline"
         >
           ¿Olvidaste tu password. Recuperalo

@@ -146,7 +146,7 @@ export default function RegisterView() {
         </Link>
 
         <Link
-            to={'/auth/register'}
+            to={'/auth/forgot-password'}
             className="text-white font-normal text-xl hover:text-fuchsia-700 hover:underline"
         >
           ¿Olvidaste tu password. Recuperalo
