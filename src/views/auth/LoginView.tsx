@@ -21,13 +21,12 @@ export default function LoginView() {
       toast.error(error.message)
     },
     onSuccess : () => {
-      toast.success('Autenticado Correctamente')
+      navigate('/')
     }
   }) 
 
   const handleLogin = (formData: UserLoginForm) => { 
     mutate(formData)
-    navigate('/')
   }
 
   return (

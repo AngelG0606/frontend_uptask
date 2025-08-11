@@ -1,11 +1,22 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import Logo from "@/components/Logo";
 import NavMenu from "@/components/NavMenu";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import { useAuth } from "@/hooks/useAuth";
+
 
 export default function AppLayout() {
-  return (
+
+    const { data, isLoading, isError } = useAuth()
+
+    if(isError) {
+        return <Navigate to={'/auth/login'} />
+    }
+
+    if(isLoading) return <p className="text-5xl text-gray-500 text-center">Cargando...</p>
+
+ if(data) return (
     <>
         <header className="bg-gray-800 py-5">
             <div className="max-w-screen-2xl mx-auto flex flex-col lg:flex-row justify-between items-center">
@@ -15,7 +26,7 @@ export default function AppLayout() {
                     </Link>
                 </div>
 
-                <NavMenu />
+                <NavMenu name={data.name}/>
             </div>
         </header>
 
