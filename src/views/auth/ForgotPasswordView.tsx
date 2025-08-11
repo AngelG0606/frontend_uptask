@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { ForgotPasswordForm } from "../../types";
+import type { ForgotPasswordForm } from "../../types";
 import ErrorMessage from "@/components/ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { forgotPassword } from "@/api/authApi";
+import { toast } from "react-toastify";
 
 export default function ForgotPasswordView() {
   const initialValues: ForgotPasswordForm = {
@@ -9,14 +12,34 @@ export default function ForgotPasswordView() {
   }
   const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: initialValues });
   
-  const handleForgotPassword = (formData: ForgotPasswordForm) => {}
+  const { mutate } = useMutation({
+    mutationFn : forgotPassword,
+    onError : (error) => {
+        toast.error(error.message)
+    },
+    onSuccess : (data) => {
+        toast.success(data)
+        reset()
+    }
+  })
+
+  const handleForgotPassword = (formData: ForgotPasswordForm) => {
+    mutate(formData)
+  }
 
 
   return (
     <>
+
+        <h1 className="text-5xl font-black text-white">Reestablecer Password</h1>
+      <p className="text-2xl font-light text-white mt-5">
+        ¿Olvidaste tu password? coloca tu email {''}
+        <span className=" text-fuchsia-500 font-bold"> y recibe instrucciones</span>
+      </p>
+
       <form
         onSubmit={handleSubmit(handleForgotPassword)}
-        className="space-y-8 p-10  bg-white"
+        className="space-y-8 p-10  bg-white mt-10"
         noValidate
       >
         <div className="flex flex-col gap-5">
