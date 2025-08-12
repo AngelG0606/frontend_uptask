@@ -10,11 +10,11 @@ export default function AppLayout() {
 
     const { data, isLoading, isError } = useAuth()
 
+    if(isLoading) return <p className="text-5xl text-gray-500 text-center">Cargando...</p>
+
     if(isError) {
         return <Navigate to={'/auth/login'} />
     }
-
-    if(isLoading) return <p className="text-5xl text-gray-500 text-center">Cargando...</p>
 
  if(data) return (
     <>
