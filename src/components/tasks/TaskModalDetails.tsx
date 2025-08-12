@@ -7,8 +7,7 @@ import { toast } from 'react-toastify';
 import { formatDate } from '@/utils/utils';
 import { statusTranslations } from '@/locales/es';
 import type { TaskStatus } from '@/types/index';
-
-
+import NotesPanel from '../notes/NotesPanel';
 
 
 export default function TaskModalDetails() {
@@ -39,7 +38,6 @@ export default function TaskModalDetails() {
             queryClient.invalidateQueries({queryKey : ['task', taskId]})
             queryClient.invalidateQueries({queryKey : ['project', projectId]})
             toast.success(data)
-            navigate(location.pathname, {replace : true})
         }
     })
 
@@ -97,6 +95,27 @@ export default function TaskModalDetails() {
                                     >{data.name}
                                     </Dialog.Title>
                                     <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
+                                    
+                                    {data.completedBy.length ? (
+                                        <>
+                                            <p className='text-lg text-slate-500 mb-2'>Historial de cambios</p>
+
+
+                                            {data.completedBy.map((activityLog) =>(
+                                                <p key={activityLog._id}>
+                                                    <span className='font-bold text-slate-600'>
+                                                        Actualizado por : {''}
+                                                    </span>
+                                                    {activityLog.user.name} {'   '}
+                                                    status: {statusTranslations[activityLog.status]}
+                                                </p>
+                                            ))}
+                                        
+                                        </>
+                                    ) : (
+                                        <p className='text-lg text-slate-600 text-center'>No hay cambios</p>
+                                    )}
+
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
                                         <select 
@@ -109,6 +128,9 @@ export default function TaskModalDetails() {
                                             ))}   
                                         </select>
                                     </div>
+
+                                    <NotesPanel />        
+
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
